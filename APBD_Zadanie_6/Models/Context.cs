@@ -1,6 +1,4 @@
-﻿
-using APBD_Zadanie_6.Configuration;
-using APBD_Zadanie_6.Models;
+﻿using APBD_Zadanie_6.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace APBD_Zadanie_6.Models
@@ -9,7 +7,6 @@ namespace APBD_Zadanie_6.Models
     {
         public Context() { }
         public Context(DbContextOptions<Context> options) : base(options) { }
-
 
         public virtual DbSet<Medicament> Medicaments { get; set; }
         public virtual DbSet<PrescriptionMedicament> PrescriptionMedicaments { get; set; }
@@ -23,7 +20,6 @@ namespace APBD_Zadanie_6.Models
             modelBuilder.ApplyConfiguration(new MedicamentConfig());
             modelBuilder.ApplyConfiguration(new PatientConfig());
             modelBuilder.ApplyConfiguration(new PrescriptionConfig());
-            modelBuilder.ApplyConfiguration(new PrescriptionMedicamentConfig());
         }
     }
 }

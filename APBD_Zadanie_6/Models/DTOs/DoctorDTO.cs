@@ -1,12 +1,10 @@
-﻿namespace APBD_Zadanie_6.Models
+﻿namespace APBD_Zadanie_6.Models.DTOs
 {
-    public class Doctor
+    public class DoctorDTO
     {
         public int IdDoctor { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-
-        public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
     }
 }
