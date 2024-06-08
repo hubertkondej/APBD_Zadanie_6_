@@ -8,6 +8,6 @@
         public int IdDoctor { get; set; }
         public DateTime Date { get; set; }
         public DateTime DueDate { get; set; }
-        public List<MedicamentDto> Medicaments { get; set; }
+        public List<MedicamentDTO> Medicaments { get; set; }
     }
 }

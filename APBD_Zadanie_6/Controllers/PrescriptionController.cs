@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using APBD_Zadanie_6.Interfaces;
 using APBD_Zadanie_6.Models.DTOs;
-using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -39,9 +39,8 @@ public class PrescriptionController : ControllerBase
                 IdPatient = prescriptionDto.IdPatient,
                 FirstName = prescriptionDto.FirstName,
                 LastName = prescriptionDto.LastName,
-                BirthDate = DateTime.Now
+                Birthdate = DateTime.Now
             };
-
             await _patientRepository.AddPatientAsync(patient);
         }
 
@@ -54,28 +53,29 @@ public class PrescriptionController : ControllerBase
         var medicamentIds = prescriptionDto.Medicaments.Select(md => md.IdMedicament).ToList();
         var medicaments = await _context.Medicaments.Where(m => medicamentIds.Contains(m.IdMedicament)).ToListAsync();
 
-        if (medicaments.Count == prescriptionDto.Medicaments.Count)
+        if (medicaments.Count != prescriptionDto.Medicaments.Count)
         {
-            var prescription = new Prescription
-            {
-                Date = prescriptionDto.Date,
-                DueDate = prescriptionDto.DueDate,
-                Patient = patient,
-                Doctor = doctor,
-                PrescriptionMedicaments = prescriptionDto.Medicaments.Select(md => new PrescriptionMedicament
-                {
-                    IdMedicament = md.IdMedicament,
-                    Dose = md.Dose,
-                    Details = md.Details
-                }).ToList()
-            };
-
-            _context.Prescriptions.Add(prescription);
-            await _context.SaveChangesAsync();
-
-            return Ok();
+            return BadRequest("One or more medicaments not found");
         }
-        return BadRequest("One or more medicaments not found");
+
+        var prescription = new Prescription
+        {
+            Date = prescriptionDto.Date,
+            DueDate = prescriptionDto.DueDate,
+            Patient = patient,
+            Doctor = doctor,
+            PrescriptionMedicament = prescriptionDto.Medicaments.Select(md => new PrescriptionMedicament
+            {
+                IdMedicament = md.IdMedicament,
+                Dose = md.Dose,
+                Details = md.Details
+            }).ToList()
+        };
+
+        _context.Prescriptions.Add(prescription);
+        await _context.SaveChangesAsync();
+
+        return Ok();
     }
 
     [HttpGet("patient/{id}")]
@@ -92,17 +92,17 @@ public class PrescriptionController : ControllerBase
             patient.IdPatient,
             patient.FirstName,
             patient.LastName,
-            patient.BirthDate,
+            patient.Birthdate,
             Prescriptions = patient.Prescriptions.Select(p => new
             {
                 p.IdPrescription,
                 p.Date,
                 p.DueDate,
-                Medicaments = p.PrescriptionMedicaments.Select(pm => new
+                Medicaments = p.PrescriptionMedicament.Select(pm => new
                 {
-                    pm.Medicament.IdMedicament,
-                    pm.Medicament.Name,
-                    pm.Medicament.Description,
+                    pm.IdMedicamentNav.IdMedicament,
+                    pm.IdMedicamentNav.Name,
+                    pm.IdMedicamentNav.Description,
                     pm.Dose,
                     pm.Details
                 }),

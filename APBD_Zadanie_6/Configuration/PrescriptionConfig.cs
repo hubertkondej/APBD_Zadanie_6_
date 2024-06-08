@@ -1,6 +1,7 @@
 ﻿using APBD_Zadanie_6.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 namespace APBD_Zadanie_6.Configuration
 {
     public class PrescriptionConfig : IEntityTypeConfiguration<Prescription>
@@ -8,22 +9,25 @@ namespace APBD_Zadanie_6.Configuration
         public void Configure(EntityTypeBuilder<Prescription> builder)
         {
             builder.HasKey(p => p.IdPrescription).HasName("Prescription_PK");
+
             builder.ToTable("Prescription");
+
             builder.Property(p => p.Date).IsRequired();
             builder.Property(p => p.DueDate).IsRequired();
 
-            builder.HasOne(p => p.DoctorNav)
+            builder.HasOne(p => p.Doctor)  
                 .WithMany(d => d.Prescriptions)
                 .HasForeignKey(p => p.IdDoctor)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Prescription_Doctor_FK");
 
-            builder.HasOne(p => p.PatientNav)
+            builder.HasOne(p => p.Patient) 
                 .WithMany(pa => pa.Prescriptions)
                 .HasForeignKey(p => p.IdPatient)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Prescription_Patient_FK");
 
+           
             builder.HasData(new Prescription
             {
                 IdPrescription = 1,

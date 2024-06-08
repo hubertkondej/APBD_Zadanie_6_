@@ -11,6 +11,8 @@
         public virtual Patient Patient { get; set; }
         public virtual Doctor Doctor { get; set; }
         public virtual ICollection<PrescriptionMedicament> PrescriptionMedicaments { get; set; }
+        public List<PrescriptionMedicament> PrescriptionMedicament { get; internal set; }
+
 
         public Prescription()
         {

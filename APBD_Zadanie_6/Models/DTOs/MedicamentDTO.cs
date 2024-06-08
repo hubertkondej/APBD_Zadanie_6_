@@ -1,4 +1,4 @@
-﻿namespace APBD_Zadanie_6.Models
+﻿namespace APBD_Zadanie_6.Models.DTOs
 {
     public class MedicamentDTO
     {
@@ -8,3 +8,4 @@
         public int Dose { get; set; }
         public string Details { get; set; }
     }
+}

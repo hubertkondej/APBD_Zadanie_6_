@@ -9,5 +9,6 @@
 
         public virtual Medicament IdMedicamentNav { get; set; }
         public virtual Prescription IdPrescriptionNav { get; set; }
+        public object Medicament { get; internal set; }
     }
 }

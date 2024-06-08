@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using APBD_Zadanie_6.Interfaces;
+﻿using APBD_Zadanie_6.Interfaces;
 using APBD_Zadanie_6.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,8 +17,8 @@ namespace APBD_Zadanie_6.Repositories
         {
             return await _context.Patients
                 .Include(p => p.Prescriptions)
-                .ThenInclude(p => p.PrescriptionMedicaments)
-                .ThenInclude(pm => pm.Medicament)
+                    .ThenInclude(pr => pr.PrescriptionMedicaments)
+                        .ThenInclude(pm => pm.IdMedicamentNav)
                 .FirstOrDefaultAsync(p => p.IdPatient == id);
         }
 
@@ -34,40 +33,10 @@ namespace APBD_Zadanie_6.Repositories
             return await _context.Patients
                 .Include(p => p.Prescriptions)
                     .ThenInclude(pr => pr.PrescriptionMedicaments)
-                        .ThenInclude(pm => pm.Medicament)
+                        .ThenInclude(pm => pm.IdMedicamentNav)
                 .Include(p => p.Prescriptions)
                     .ThenInclude(pr => pr.Doctor)
                 .FirstOrDefaultAsync(p => p.IdPatient == id);
-        }
-
-        Task<Patient> IPatientRepository.GetPatientAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AddPatientAsync(Patient patient)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Patient> IPatientRepository.GetPatientDetailsAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Patient> IPatientRepository.GetPatientAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AddPatientAsync(Patient patient)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Patient> IPatientRepository.GetPatientDetailsAsync(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }
